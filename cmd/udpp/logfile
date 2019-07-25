@@ -1,0 +1,72 @@
+::1 - - [23/Jul/2019:15:46:02 +0800] "POST /config HTTP/1.1" 200 33
+::1 - - [23/Jul/2019:15:46:08 +0800] "POST /config HTTP/1.1" 200 50
+[36mINFO[0m[0002] Parsing token error                          
+::1 - - [23/Jul/2019:15:46:56 +0800] "POST /config HTTP/1.1" 200 50
+::1 - - [23/Jul/2019:15:47:04 +0800] "POST /config HTTP/1.1" 200 33
+[36mINFO[0m[0072] Parsing token error                          
+::1 - - [24/Jul/2019:17:57:40 +0800] "POST /config HTTP/1.1" 200 50
+[36mINFO[0m[0004] No current data,set default                  
+::1 - - [24/Jul/2019:18:01:36 +0800] "POST /config HTTP/1.1" 200 3248
+[36mINFO[0m[0004] No current data,set default                  
+::1 - - [24/Jul/2019:18:15:06 +0800] "POST /config HTTP/1.1" 200 3229
+::1 - - [24/Jul/2019:18:16:26 +0800] "POST /update_config HTTP/1.1" 200 33
+::1 - - [24/Jul/2019:18:17:13 +0800] "POST /update_config HTTP/1.1" 200 33
+::1 - - [24/Jul/2019:18:17:31 +0800] "POST /config HTTP/1.1" 200 3229
+::1 - - [24/Jul/2019:18:17:50 +0800] "POST /config HTTP/1.1" 200 3229
+[36mINFO[0m[0140] No current data,set default                  
+::1 - - [24/Jul/2019:18:17:57 +0800] "POST /config HTTP/1.1" 200 3230
+::1 - - [24/Jul/2019:18:23:05 +0800] "POST /update_config HTTP/1.1" 200 33
+::1 - - [24/Jul/2019:18:23:45 +0800] "POST /config HTTP/1.1" 200 3229
+[36mINFO[0m[0006] update...                                    
+::1 - - [24/Jul/2019:18:24:44 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0003] update...                                    
+::1 - - [24/Jul/2019:18:25:42 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0015] update...                                    
+[36mINFO[0m[0015] update failed                                
+::1 - - [24/Jul/2019:18:30:33 +0800] "POST /update_config HTTP/1.1" 200 44
+[36mINFO[0m[0004] update...                                    
+[36mINFO[0m[0004] update failed: update document must contain key beginning with '$' 
+::1 - - [24/Jul/2019:18:37:12 +0800] "POST /update_config HTTP/1.1" 200 44
+[36mINFO[0m[0006] update...                                    
+::1 - - [24/Jul/2019:18:38:02 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0031] insert...                                    
+::1 - - [24/Jul/2019:18:38:27 +0800] "POST /update_config HTTP/1.1" 200 33
+[31mERRO[0m[0007] bad request data format                      
+::1 - - [24/Jul/2019:19:30:09 +0800] "POST /update_config HTTP/1.1" 200 54
+[36mINFO[0m[0040] insert...                                    
+::1 - - [24/Jul/2019:19:30:42 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0104] update...                                    
+::1 - - [24/Jul/2019:19:31:46 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0237] insert...                                    
+::1 - - [24/Jul/2019:19:33:59 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0003] update...                                    
+[36mINFO[0m[0003] OK                                           
+::1 - - [24/Jul/2019:19:36:24 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0005] insert...                                    
+[36mINFO[0m[0005] OK                                           
+::1 - - [25/Jul/2019:11:37:54 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0158] No current data,set default                  
+::1 - - [25/Jul/2019:11:40:26 +0800] "POST /config HTTP/1.1" 200 6860
+[36mINFO[0m[0340] insert...                                    
+[36mINFO[0m[0340] OK                                           
+::1 - - [25/Jul/2019:11:43:29 +0800] "POST /update_config HTTP/1.1" 200 33
+::1 - - [25/Jul/2019:13:15:18 +0800] "POST /config HTTP/1.1" 200 6860
+[36mINFO[0m[0006] update...                                    
+[36mINFO[0m[0006] OK                                           
+::1 - - [25/Jul/2019:13:16:33 +0800] "POST /update_config HTTP/1.1" 200 33
+[37mDEBU[0m[0002] request data: {PID:999 Bgcolor: Themecolor: Config:[{RightID:1 RightType:1 RightName:知情权 Description:收集您信息时，必须给与您充分的知情权 Checked:0 Details:[{Type:desc Id:1 Title:知情权详细描述 Desc:数据控制者收集个人信息必须给予个人充分的知情权。应当向数据主体提供相应的信息以保障数据主体对控制者身份、个人信息处理目的及方式、权利维护途径等内容的知晓。比如，数据控制者在收集与数据主体相关的个人数据时，应当告知数据主体，包括数据控制者的身份与详细联系方式、数据保护官的详细联系方式、数据处理将涉及的个人数据的使用目的，以及处理个人数据的法律依据等。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:checkbox Id:2 Title:告知方式 Desc: Options:[{Label:站内信 Value:0} {Label:手机短信 Value:1} {Label:邮件 Value:2}] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:settings Id:2 Title: Desc: Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[{Title:企业基本信息配置 InfoList:[{Name:名称 Placeholder:请输入 Value:} {Name:联系方式 Placeholder:请输入 Value:} {Name:地址 Placeholder:请输入 Value:}]} {Title:数据保护官信息配置 InfoList:[{Name:名称 Placeholder:请输入 Value:} {Name:联系方式 Placeholder:请输入 Value:} {Name:邮箱 Placeholder:请输入 Value:}]}] CheckboxOptions:[] ShareList:[]}]} {RightID:2 RightType:1 RightName:访问权 Description:您有权访问个人数据并有权获知相关信息 Checked:0 Details:[{Type:desc Id: Title: Desc:数据主体有权从数据控制者那里得知关于其个人数据是否正在被处理的真实情形，如果其数据正在被处理的话，数据主体应当有权访问个人数据并有权获知相关信息，如该数据处理的目的；相关个人数据的类型；个人数据已经被或将被披露给数据接收者或接收者的类型，特别是当数据的接收者属于第三国或国际组织；在可能的情形下，个人数据将被储存的预期期限等。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:api Id: Title:API地址 Desc: Options:[] Checked:[] Protocol: Placeholder:请输入 Value: SettingList:[] CheckboxOptions:[] ShareList:[]}]} {RightID:3 RightType:1 RightName:遗忘权 Description:有权要求商户及时删除您的个人信息数据 Checked:0 Details:[{Type:desc Id: Title: Desc:数据主体有权要求数据控制者及时删除其个人相关数据的权利。当出现“个人数据对于实现其被收集或处理的相关目的不再必要”等六种情形之一时，数据控制者有责任及时删除其个人数据。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:checkbox Id: Title:遗忘方式 Desc: Options:[{Label:非业务关联数据定期删除 Value:0} {Label:注销后删除所有个人信息 Value:1}] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]}]} {RightID:4 RightType:1 RightName:可携带权 Description:有权要求商户提供与您个人有关的数据下载 Checked:0 Details:[{Type:desc Id: Title: Desc:数据主体有权以结构化、通用和机器可读的格式接收其提供给数据控制者的与其有关个人数据，数据主体有权将这些数据传输给另一个数据控制者，而被要求转移数据的控制者应当配合数据主体的相应要求。用户数据可携权不仅赋予用户取得、重复利用相关数据的权利，还赋予用户传输该等数据的权利。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:api Id: Title:API地址 Desc: Options:[] Checked:[] Protocol: Placeholder:请输入 Value: SettingList:[] CheckboxOptions:[] ShareList:[]}]} {RightID:5 RightType:2 RightName:拒绝权 Description:有权拒绝商户对您数据的非公益使用方式 Checked:0 Details:[{Type:desc Id: Title: Desc:有关数据主体的数据处理，包括根据这些条款而进行的用户画像，数据主体有权随时提出反对。此时，数据控制者须立即停止针对这部分个人数据的处理行为，除非数据控制者证明，相比数据主体的利益、权利和自由，具有压倒性的正当理由需要进行处理，或者处理是为了提起、行使或辩护法律性主张。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]} {Type:checkbox Id: Title:拒绝行为 Desc: Options:[{Label:获取我的用户画像 Value:0} {Label:市场营销 Value:1}] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]}]} {RightID:6 RightType:2 RightName:修正权 Description:您有权要求商户及时纠正与您相关的个人信息 Checked:0 Details:[{Type:desc Id: Title: Desc:数据主体有权要求数据控制及时地纠正与其相关的不准确个人数据。考虑到处理的目的，数据主体应当有权使不完整的个人数据完整，包括通过提供补充声明的方式进行完善。 Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[] ShareList:[]}]} {RightID:7 RightType:2 RightName:共享权 Description:经用户的明示授权后，企业可以将用户相关的数据分享给合作伙伴 Checked:0 Details:[{Type:shareTable Id: Title: Desc: Options:[] Checked:[] Protocol: Placeholder: Value: SettingList:[] CheckboxOptions:[{Label:用户名 Value:0} {Label:手机 Value:1} {Label:真实姓名 Value:2} {Label:身份证号 Value:3} {Label:身份证照片 Value:4}] ShareList:[{CompanyName:ele Checked:[]} {CompanyName:tencent Checked:[]}]}]}]} 
+[36mINFO[0m[0002] update...                                    
+[36mINFO[0m[0002] OK                                           
+::1 - - [25/Jul/2019:13:21:04 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0002] update...                                    
+[36mINFO[0m[0002] OK                                           
+::1 - - [25/Jul/2019:13:21:28 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0003] update...                                    
+[36mINFO[0m[0003] OK                                           
+::1 - - [25/Jul/2019:13:46:57 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0017] insert...                                    
+[36mINFO[0m[0017] OK                                           
+::1 - - [25/Jul/2019:13:47:12 +0800] "POST /update_config HTTP/1.1" 200 33
+[36mINFO[0m[0092] update...                                    
+[36mINFO[0m[0092] OK                                           
+::1 - - [25/Jul/2019:13:48:26 +0800] "POST /update_config HTTP/1.1" 200 33

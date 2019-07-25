@@ -1,0 +1,7 @@
+#dsn="root:@tcp(localhost)/udpp2"
+port=8989
+logfile="logfile"
+enableCors=true
+mongourl="mongodb://localhost:27017"
+auth=false
+loglevel="info"

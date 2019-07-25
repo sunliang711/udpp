@@ -1,0 +1,4 @@
+dsn="root:@tcp(localhost)/udpp2"
+port=8989
+logfile="logfile"
+enableCors=true

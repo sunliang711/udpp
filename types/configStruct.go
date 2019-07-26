@@ -1,5 +1,9 @@
 package types
 
+import (
+	"fmt"
+)
+
 const (
 	SafeLaw = 1
 	Gdpr    = 2
@@ -51,12 +55,13 @@ type ShareListItem struct {
 
 //--------------------------------------------------
 type ConfigItem struct {
-	RightID     int          `json:"right_id" bson:"right_id"`
-	RightType   int          `json:"right_type" bson:"right_type"`
-	RightName   string       `json:"right_name" bson:"right_name"`
-	Description string       `json:"description" bson:"description"`
-	Checked     int          `json:"checked" bson:"checked"`
-	Details     []DetailItem `json:"details" bson:"details"`
+	RightID     int    `json:"right_id" bson:"right_id"`
+	RightType   int    `json:"right_type" bson:"right_type"`
+	RightName   string `json:"right_name" bson:"right_name"`
+	Description string `json:"description" bson:"description"`
+	//TODO int -> bool
+	Checked int          `json:"checked" bson:"checked"`
+	Details []DetailItem `json:"details" bson:"details"`
 }
 
 type ConfigRes struct {
@@ -66,9 +71,23 @@ type ConfigRes struct {
 	Config     []ConfigItem `json:"config" bson:"config"`
 }
 
-func ConfigResTemplate() (r *ConfigRes) {
+func (c ConfigRes) GetURL(id int) (api string, err error) {
+	for _, v := range c.Config {
+		if v.RightID == id {
+			for _, d := range v.Details {
+				if d.Type == "api" {
+					return d.Value, nil
+				}
+			}
+			break
+		}
+	}
+	return "", fmt.Errorf("Not found url with right id: %v", id)
+}
+
+func ConfigResTemplate(pid string) (r *ConfigRes) {
 	r = &ConfigRes{
-		PID:        r.PID,
+		PID:        pid,
 		Bgcolor:    "",
 		Themecolor: "",
 
@@ -88,7 +107,7 @@ func ConfigResTemplate() (r *ConfigRes) {
 					},
 					{
 						Type:  "checkbox",
-						Id:    "2",
+						Id:    "100",
 						Title: "告知方式",
 						Options: []Option{
 							{"站内信", "0"},
@@ -99,7 +118,7 @@ func ConfigResTemplate() (r *ConfigRes) {
 					},
 					{
 						Type: "settings",
-						Id:   "2",
+						Id:   "3",
 						SettingList: []SettingItem{
 							{
 								Title: "企业基本信息配置",
@@ -130,12 +149,12 @@ func ConfigResTemplate() (r *ConfigRes) {
 				Details: []DetailItem{
 					{
 						Type: "desc",
-						Id:   "",
+						Id:   "4",
 						Desc: AccessRightDescLong,
 					},
 					{
 						Type:        "api",
-						Id:          "",
+						Id:          "5",
 						Title:       "API地址",
 						Protocol:    "",
 						Placeholder: "请输入",
@@ -152,12 +171,12 @@ func ConfigResTemplate() (r *ConfigRes) {
 				Details: []DetailItem{
 					{
 						Type: "desc",
-						Id:   "",
+						Id:   "6",
 						Desc: ForgetRightDescLong,
 					},
 					{
 						Type:  "checkbox",
-						Id:    "",
+						Id:    "110",
 						Title: "遗忘方式",
 						Options: []Option{
 							{Label: "非业务关联数据定期删除", Value: "0"},
@@ -177,12 +196,12 @@ func ConfigResTemplate() (r *ConfigRes) {
 					{
 
 						Type: "desc",
-						Id:   "",
+						Id:   "8",
 						Desc: PortableRightDescLong,
 					},
 					{
 						Type:        "api",
-						Id:          "",
+						Id:          "9",
 						Title:       "API地址",
 						Protocol:    "",
 						Placeholder: "请输入",
@@ -200,12 +219,12 @@ func ConfigResTemplate() (r *ConfigRes) {
 				Details: []DetailItem{
 					{
 						Type: "desc",
-						Id:   "",
+						Id:   "10",
 						Desc: RefuseRightDescLong,
 					},
 					{
 						Type:  "checkbox",
-						Id:    "",
+						Id:    "120",
 						Title: "拒绝行为",
 						Options: []Option{
 							{Label: "获取我的用户画像", Value: "0"},
@@ -224,7 +243,7 @@ func ConfigResTemplate() (r *ConfigRes) {
 				Details: []DetailItem{
 					{
 						Type: "desc",
-						Id:   "",
+						Id:   "12",
 						Desc: ModifyRightDescLong,
 					},
 				},
@@ -246,14 +265,14 @@ func ConfigResTemplate() (r *ConfigRes) {
 							{"身份证照片", "4"},
 						},
 						ShareList: []ShareListItem{
-							{
-								CompanyName: "ele",
-								Checked:     []string{},
-							},
-							{
-								CompanyName: "tencent",
-								Checked:     []string{},
-							},
+							// {
+							// 	CompanyName: "ele",
+							// 	Checked:     []string{},
+							// },
+							// {
+							// 	CompanyName: "tencent",
+							// 	Checked:     []string{},
+							// },
 						},
 					},
 				},

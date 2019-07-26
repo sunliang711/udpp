@@ -12,10 +12,12 @@ import (
 	"github.com/spf13/viper"
 	"github.com/sunliang711/udpp/handlers"
 	"github.com/sunliang711/udpp/models"
+	"github.com/sunliang711/udpp/utils"
 )
 
 func main() {
 	pflag.StringP("mongourl", "", "", "mongodb url")
+	pflag.StringP("blockDB", "", "", "mongodb url")
 	pflag.IntP("port", "p", 0, "listen port")
 	pflag.Bool("enableCors", false, "enable cors")
 	pflag.StringP("logfile", "l", "", "logfile path")
@@ -27,31 +29,13 @@ func main() {
 	viper.AddConfigPath(".")
 	viper.ReadInConfig()
 
-	//models.InitMysql(viper.GetString("dsn"))
-	//defer models.CloseMysql()
 	if !viper.GetBool("auth") {
 		logrus.Infof("Disable auth")
 	}
 
 	models.InitMongo(viper.GetString("mongourl"))
-	loglevel := viper.GetString("loglevel")
-	if len(loglevel) == 0 {
-		loglevel = "info"
-	}
-	switch loglevel {
-	case "debug":
-		logrus.SetLevel(logrus.DebugLevel)
-	case "info":
-		logrus.SetLevel(logrus.InfoLevel)
-	case "error":
-		logrus.SetLevel(logrus.ErrorLevel)
-	case "fatal":
-		logrus.SetLevel(logrus.FatalLevel)
-	case "panic":
-		logrus.SetLevel(logrus.PanicLevel)
-	default:
-		logrus.SetLevel(logrus.InfoLevel)
-	}
+	models.InitBlockDb(viper.GetString("blockDB"))
+	logrus.SetLevel(utils.LogLevel(viper.GetString("loglevel")))
 
 	rt := handlers.Router(viper.GetBool("enableCors"))
 	addr := fmt.Sprintf(":%d", viper.GetInt("port"))

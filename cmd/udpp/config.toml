@@ -2,6 +2,8 @@
 port=8989
 logfile="logfile"
 enableCors=true
-mongourl="mongodb://localhost:27017"
 auth=false
-loglevel="info"
+loglevel="debug"
+mongourl="mongodb://localhost:27017"
+blockDB="mongodb://localhost:27017"
+# blockDB="mongodb://blockdbw:wjs123@aliyun.eagle711.win:8990"

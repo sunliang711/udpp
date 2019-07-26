@@ -155,11 +155,11 @@ func RightResTemplate(pid, uid string) (r *RightRes) {
 					},
 					{
 						Type:  "checkbox",
-						ID:    "11",
+						ID:    "110",
 						Title: "遗忘方式",
 						Options: []Option{
 							{"非业务关联数据定期删除", "0"},
-							{"注销个人用户账号", "1"},
+							{"注销后删除所有个人信息", "1"},
 						},
 						Checked:  []string{},
 						Disabled: []string{},

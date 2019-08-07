@@ -1,5 +1,9 @@
 package types
 
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type TableInfoItem struct {
 	Title string `json:"title" bson:"title"`
 	Label string `json:"label" bson:"label"`
@@ -53,11 +57,13 @@ type Permission struct {
 }
 
 type RightRes struct {
-	PID            string       `json:"pid" bson:"pid"`
-	UID            string       `json:"uid" bson:"uid"`
-	BgColor        string       `json:"bgcolor" bson:"bgcolor"`
-	ThemeColor     string       `json:"themecolor" bson:"themecolor"`
-	PermissionList []Permission `json:"permissionList" bson:"permissionList"`
+	ID             primitive.ObjectID `json:"id" bson:"_id"`
+	PID            string             `json:"pid" bson:"pid"`
+	UID            string             `json:"uid" bson:"uid"`
+	BgColor        string             `json:"bgcolor" bson:"bgcolor"`
+	ThemeColor     string             `json:"themecolor" bson:"themecolor"`
+	PermissionList []Permission       `json:"permissionList" bson:"permissionList"`
+	Link           string             `json:"link" bson:"link"`
 }
 
 func RightResTemplate(pid, uid string) (r *RightRes) {
@@ -256,7 +262,19 @@ func RightResTemplate(pid, uid string) (r *RightRes) {
 						Type: "title",
 						ID:   "10",
 					},
-					//TODO
+					{
+						Type:  "collapseTitle",
+						ID:    "14",
+						Title: "共享权详细",
+						Desc:  ShareRightDescLong,
+					},
+					{
+						Type:            "shareTable",
+						ID:              "50",
+						CheckboxOptions: []Option{},
+						ShareList:       []ShareListItem{},
+						Checked:         []string{},
+					},
 				},
 			},
 		},

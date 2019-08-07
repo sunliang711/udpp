@@ -1,8 +1,8 @@
 #dsn="root:@tcp(localhost)/udpp2"
-port=2001
+port=2002
 logfile="logfile"
 enableCors=true
-auth=false
+auth=true
 loglevel="debug"
 mongourl="mongodb://localhost:27017"
 #blockDB="mongodb://localhost:27017"
@@ -10,6 +10,6 @@ blockDB="mongodb://udpp:udpp123@47.100.222.11:30007"
 
 blockAddress="http://47.100.222.11:10003/blockQuery/"
 
-https=true
+https=false
 cert="aliyun.pem"
 key="aliyun.key"

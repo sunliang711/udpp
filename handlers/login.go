@@ -10,9 +10,14 @@ import (
 )
 
 type credential struct {
-	User     string `json:"user"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+const (
+	username = "ann"
+	password = "ann123"
+)
 
 func loginHandler(w http.ResponseWriter, req *http.Request) {
 	var c credential
@@ -24,7 +29,7 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//TODO
-	if c.User != "admin" || c.Password != "admin" {
+	if c.Username != username || c.Password != password {
 		utils.JSONResponse(1, "invalid user or password", nil, w)
 		logrus.Errorf("invalid user or password")
 		return
@@ -35,7 +40,7 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	claims["iss"] = "udpp"
 	claims["info"] = struct {
 		Name string
-	}{c.User}
+	}{c.Username}
 	//TODO
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	token.Claims = claims
@@ -46,6 +51,12 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		logrus.Errorf("generate token error")
 		return
 	}
-	utils.JSONResponse(0, "OK", tokenString, w)
+	logrus.Println(tokenString)
+	// utils.JSONResponse(0, "OK", tokenString, w)
+	utils.JSONResponse(0, "OK", struct {
+		PID      string `json:"pid"`
+		Username string `json:"username"`
+		Token    string `json:"token"`
+	}{"001", c.Username, tokenString}, w)
 
 }

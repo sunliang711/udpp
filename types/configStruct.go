@@ -256,6 +256,11 @@ func ConfigResTemplate(pid string) (r *ConfigRes) {
 				Checked:     0,
 				Details: []DetailItem{
 					{
+						Type: "desc",
+						Id:   "12",
+						Desc: ShareRightDescLong,
+					},
+					{
 						Type: "shareTable",
 						CheckboxOptions: []Option{
 							{"用户名", "0"},

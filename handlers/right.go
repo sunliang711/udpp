@@ -1,11 +1,19 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
+	"crypto/md5"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
+
+	"github.com/spf13/viper"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/sirupsen/logrus"
 	"github.com/sunliang711/udpp/models"
@@ -15,9 +23,78 @@ import (
 )
 
 const (
-	blockdbDatabase   = "udppUser"
+	blockdbDatabase   = "udpp"
 	blockdbCollection = "right"
 )
+
+type item struct {
+	UdppItemHandler string `json:"udppItemHandler"`
+	GmtCreated      string `json:"gmtCreated"`
+}
+type udppHandlers struct {
+	Code string `json:"code"`
+	Data struct {
+		UdppHandlers []item `json:"udppHandlers"`
+	} `json:"data"`
+}
+
+// accessList TODO
+func accessList(w http.ResponseWriter, req *http.Request) {
+	var err error
+	query := req.URL.Query()
+	pid := query.Get("pid")
+	uid := query.Get("uid")
+	pageNo := query.Get("pageNo")
+	pageSize := "10"
+
+	var config types.ConfigRes
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	mongoDBC := models.Mdb.Database(configDatabase).Collection(configCollection)
+	result := mongoDBC.FindOne(ctx, bson.M{"pid": pid})
+	err = result.Decode(&config)
+	if err != nil {
+		errMsg := fmt.Sprintf("query bgColor,themeColor from mongo error: %v", err)
+		utils.JSONResponse(1, errMsg, nil, w)
+		logrus.Error(errMsg)
+		return
+	}
+	var timeline []types.TimeLineItem
+	var uHandlers udppHandlers
+	accessURL, err := config.GetURL(types.AccessRightID)
+	logrus.Infof("access url: %v", accessURL)
+	param := struct {
+		PageNo   string `json:"pageNo"`
+		PageSize string `json:"pageSize"`
+		UserID   string `json:"userId"`
+	}{pageNo, pageSize, uid}
+	bs, _ := json.Marshal(&param)
+	body := bytes.NewReader(bs)
+
+	request, _ := http.NewRequest("POST", accessURL, body)
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("x-anlink-userid", uid)
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		msg := fmt.Sprintf("client.Do error: %v", err)
+		logrus.Error(msg)
+		utils.JSONResponse(200, msg, nil, w)
+	}
+	err = json.NewDecoder(resp.Body).Decode(&uHandlers)
+	if err != nil {
+		msg := fmt.Sprintf("Decode timeline error: %v", err)
+		logrus.Error(msg)
+		utils.JSONResponse(200, msg, nil, w)
+	}
+	logrus.Infof("uHandlers: %+v", uHandlers)
+	if uHandlers.Code == "0000" {
+		for _, v := range uHandlers.Data.UdppHandlers {
+			logrus.Infof("item: %+v", v)
+			timeline = append(timeline, types.TimeLineItem{v.UdppItemHandler, v.GmtCreated, true})
+		}
+	}
+	utils.JSONResponse(200, "OK", timeline, w)
+}
 
 //根据pid和uid获取所有的权利
 func getRights(w http.ResponseWriter, req *http.Request) {
@@ -63,10 +140,13 @@ func getRights(w http.ResponseWriter, req *http.Request) {
 	if n == 0 {
 		logrus.Info("No data,use right template")
 		rightRes = *types.RightResTemplate(pid, uid)
+		rightRes.ID = primitive.NewObjectID()
+		logrus.Infof("new objectID: %v", rightRes.ID)
 	} else if n == 1 {
 		logrus.Infof("FindOne with pid: %v,uid: %v in blockDB", pid, uid)
 		result := blockDBC.FindOne(ctx, bson.M{"pid": pid, "uid": uid})
 		err = result.Decode(&rightRes)
+		logrus.Debugf("FindOne result: %+v", rightRes)
 		if err != nil {
 			errMsg := fmt.Sprintf("Decode RightRes error: %v", err)
 			logrus.Error(errMsg)
@@ -85,6 +165,7 @@ func getRights(w http.ResponseWriter, req *http.Request) {
 	// rightRes.ThemeColor
 	rightRes.BgColor = config.Bgcolor
 	rightRes.ThemeColor = config.Themecolor
+	rightRes.Link = fmt.Sprintf("%s%s", viper.GetString("blockAddress"), rightRes.ID.Hex())
 
 	//知情权 config -> Details -> type"settings"       == rightRes -> permission -> Details -> tableInfo -> tableData
 	var tableInfoItem [][]types.TableInfoItem
@@ -146,8 +227,10 @@ func getRights(w http.ResponseWriter, req *http.Request) {
 	}
 	//for test
 	timeline = []types.TimeLineItem{
-		{"txt", "time", true},
-		{"txt2", "time2", true},
+		{"用户画像", "2019/6/25 12:30", true},
+		{"市场营销", "2019/6/26 12:40", true},
+		{"大数据分析", "2019/6/27 12:48", true},
+		{"短信通知", "2019/6/28 12:49", true},
 	}
 	for i, p := range rightRes.PermissionList {
 		if p.ID == types.AccessRightID {
@@ -190,13 +273,15 @@ func getRights(w http.ResponseWriter, req *http.Request) {
 			for _, c := range config.Config {
 				if c.RightID == types.ShareRightID {
 					//TODO replace all "shareTable" with c.Details
-					rightRes.PermissionList[i].Details = []types.Detail{rightRes.PermissionList[i].Details[0]}
+					checked := rightRes.PermissionList[i].Details[2].Checked
+					rightRes.PermissionList[i].Details = []types.Detail{rightRes.PermissionList[i].Details[0], rightRes.PermissionList[i].Details[1]}
 					for _, d := range c.Details {
 						if d.Type == "shareTable" {
 							rightRes.PermissionList[i].Details = append(rightRes.PermissionList[i].Details, types.Detail{
 								Type:            "shareTable",
 								CheckboxOptions: d.CheckboxOptions,
 								ShareList:       d.ShareList,
+								Checked:         checked,
 							})
 
 						}
@@ -254,22 +339,23 @@ func getRights(w http.ResponseWriter, req *http.Request) {
 //更新用户权利
 func updateRights(w http.ResponseWriter, req *http.Request) {
 	var (
-		r   types.RightRes
-		err error
+		rightRes types.RightRes
+		err      error
 	)
 
-	err = json.NewDecoder(req.Body).Decode(&r)
+	err = json.NewDecoder(req.Body).Decode(&rightRes)
 	if err != nil {
 		errMsg := fmt.Sprint("bad request data format")
 		logrus.Error(errMsg)
 		utils.JSONResponse(1, errMsg, nil, w)
 		return
 	}
+	logrus.Debugf("updateRights: request body: %+v", rightRes)
 	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
 	C := models.BlockDb.Database(blockdbDatabase).Collection(blockdbCollection)
-	n, err := C.CountDocuments(ctx, bson.M{"pid": r.PID, "uid": r.UID})
+	n, err := C.CountDocuments(ctx, bson.M{"pid": rightRes.PID, "uid": rightRes.UID})
 	if err != nil {
-		errMsg := fmt.Sprintf("count document error with pid: %v,uid: %v,%v", r.PID, r.UID, err)
+		errMsg := fmt.Sprintf("count document error with pid: %v,uid: %v,%v", rightRes.PID, rightRes.UID, err)
 		logrus.Error(errMsg)
 		utils.JSONResponse(1, errMsg, nil, w)
 		return
@@ -278,7 +364,7 @@ func updateRights(w http.ResponseWriter, req *http.Request) {
 	if n == 0 {
 		//insert
 		logrus.Infof("insert...")
-		_, err := C.InsertOne(ctx, &r)
+		_, err := C.InsertOne(ctx, &rightRes)
 		if err != nil {
 			errMsg := fmt.Sprintf("insert failed: %v", err)
 			utils.JSONResponse(1, errMsg, nil, w)
@@ -288,7 +374,7 @@ func updateRights(w http.ResponseWriter, req *http.Request) {
 		logrus.Info("OK")
 	} else if n == 1 {
 		logrus.Infof("update...")
-		_, err = C.UpdateOne(ctx, bson.M{"pid": r.PID, "uid": r.UID}, bson.M{"$set": &r})
+		_, err = C.UpdateOne(ctx, bson.M{"pid": rightRes.PID, "uid": rightRes.UID}, bson.M{"$set": &rightRes})
 		if err != nil {
 			errMsg := fmt.Sprintf("update failed: %v", err)
 			utils.JSONResponse(1, errMsg, nil, w)
@@ -300,6 +386,43 @@ func updateRights(w http.ResponseWriter, req *http.Request) {
 		logrus.Errorf(errMsg)
 		utils.JSONResponse(1, errMsg, nil, w)
 		return
+	}
+
+	userID, _ := strconv.Atoi(rightRes.UID)
+	bs, err := json.Marshal(rightRes)
+	//var b bytes.Buffer
+	//binary.Write(&b,binary.BigEndian,&rightRes)
+	if err != nil {
+		logrus.Errorf("Encode rightRes to json error: %v", err)
+	} else {
+		h := md5.New()
+		h.Write(bs)
+		md5sum := h.Sum(nil)
+
+		rightResBs, _ := json.Marshal(rightRes)
+		//toShop
+		toShop := struct {
+			UserID             int    `json:"userId"`
+			UdppPrivacyContent string `json:"udppPrivacyContent"`
+			Hash               string `json:"hash"`
+			BlockAddress       string `json:"blockaddress"`
+		}{
+			userID,
+			string(rightResBs),
+			fmt.Sprintf("%x", md5sum),
+			fmt.Sprintf("%s%s", viper.GetString("blockAddress"), rightRes.ID.Hex()),
+		}
+		toShopBs, _ := json.Marshal(toShop)
+		logrus.Debugf("toShopBs: %s", string(toShopBs))
+		var b io.Reader
+		b = bytes.NewBuffer(toShopBs)
+		link := "http://17391-zis-stargate-tech-anlink-web-gateway.test.za-tech.net/tech-anlink-user/app/v2/anlink/sign/insertUdppPrivacy"
+		res, err := http.Post(link, "application/json", b)
+		if err != nil {
+			logrus.Errorf("Post error: %v", err)
+		} else {
+			io.Copy(os.Stdout, res.Body)
+		}
 	}
 
 	utils.JSONResponse(0, "OK", nil, w)

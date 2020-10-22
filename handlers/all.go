@@ -13,6 +13,7 @@ func Router(enableCors bool) http.Handler {
 	//Register all handlers
 	var allHandlers = []*types.HandlerObj{
 		{"/login", http.HandlerFunc(loginHandler), []string{"POST"}, ""},
+		{"/health", http.HandlerFunc(healthHandler), []string{"GET"}, ""},
 		{"/get_config", auth(http.HandlerFunc(getConfig)), []string{"GET"}, ""},
 		{"/update_config", auth(http.HandlerFunc(updateConfig)), []string{"POST"}, ""},
 		{"/get_right", auth(http.HandlerFunc(getRights)), []string{"GET"}, ""},

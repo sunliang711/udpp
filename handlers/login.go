@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sirupsen/logrus"
 	"github.com/sunliang711/udpp/utils"
-	"net/http"
-	"time"
 )
 
 type credential struct {
@@ -18,6 +19,10 @@ const (
 	username = "ann"
 	password = "ann123"
 )
+
+func healthHandler(w http.ResponseWriter, req *http.Request) {
+	utils.JSONResponse(0, "OK", nil, w)
+}
 
 func loginHandler(w http.ResponseWriter, req *http.Request) {
 	var c credential

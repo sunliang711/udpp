@@ -33,10 +33,12 @@ func main() {
 		logrus.Infof("Disable auth")
 	}
 
-    mongoURL := viper.GetString("mongourl")
-    blockDBURL :=viper.GetString("blockDB")
-    logrus.Infof("mongoURL: %v",mongoURL)
-    logrus.Infof("blockDBURL: %v",blockDBURL)
+	handlers.SetDatabase(viper.GetString("configDatabase"), viper.GetString("blockdbDatabase"))
+
+	mongoURL := viper.GetString("mongourl")
+	blockDBURL := viper.GetString("blockDB")
+	logrus.Infof("mongoURL: %v", mongoURL)
+	logrus.Infof("blockDBURL: %v", blockDBURL)
 	models.InitMongo(mongoURL)
 	models.InitBlockDb(blockDBURL)
 	logrus.SetLevel(utils.LogLevel(viper.GetString("loglevel")))
@@ -45,7 +47,7 @@ func main() {
 	addr := fmt.Sprintf(":%d", viper.GetInt("port"))
 	logrus.Infof("Listen on %v", addr)
 
-	logrus.Infof("Enable auth: %v",viper.GetBool("auth"))
+	logrus.Infof("Enable auth: %v", viper.GetBool("auth"))
 
 	var output io.Writer
 	logfile := viper.GetString("logfile")
@@ -60,11 +62,11 @@ func main() {
 	}
 
 	//TODO https
-    if viper.GetBool("https"){
-        logrus.Infof("https enabled")
-        logrus.Fatal(http.ListenAndServeTLS(addr,viper.GetString("cert"),viper.GetString("key"),gh.LoggingHandler(output, rt)))
-    }else{
-        logrus.Infof("https disabled")
-        logrus.Fatal(http.ListenAndServe(addr, gh.LoggingHandler(output, rt)))
-    }
+	if viper.GetBool("https") {
+		logrus.Infof("https enabled")
+		logrus.Fatal(http.ListenAndServeTLS(addr, viper.GetString("cert"), viper.GetString("key"), gh.LoggingHandler(output, rt)))
+	} else {
+		logrus.Infof("https disabled")
+		logrus.Fatal(http.ListenAndServe(addr, gh.LoggingHandler(output, rt)))
+	}
 }

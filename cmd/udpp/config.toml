@@ -1,4 +1,6 @@
 #dsn="root:@tcp(localhost)/udpp2"
+blockdbDatabase="tech_anlink_alicloud"
+configDatabase="tech_anlink_alicloud"
 port=2001
 logfile="logfile"
 enableCors=true

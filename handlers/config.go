@@ -14,13 +14,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-const (
-	configDatabase   = "udpp"
+var (
+	configDatabase   string
 	configCollection = "config"
 )
 
 type getConfigReq struct {
 	PID string `json:"pid"`
+}
+
+func SetDatabase(cfg, block string) {
+	configDatabase = cfg
+	blockdbDatabase = block
+	logrus.Infof("configDatabase: %v", configDatabase)
+	logrus.Infof("blockdbDatabase: %v", blockdbDatabase)
 }
 
 func getConfig(w http.ResponseWriter, req *http.Request) {

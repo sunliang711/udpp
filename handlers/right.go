@@ -22,8 +22,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-const (
-	blockdbDatabase   = "udpp"
+var (
+	blockdbDatabase   string
 	blockdbCollection = "right"
 )
 
